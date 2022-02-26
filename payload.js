@@ -48,7 +48,7 @@ function inspectlet_readDocument() {
 
 function inspectlet_writeDocument() {
 	document.open();
-	document.write(inspectlet_window.getElementById("inspectorTextArea").value);
+	document.write(inspectlet_window.document.getElementById("inspectorTextArea").value);
 	document.close();
 }
 

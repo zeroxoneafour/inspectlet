@@ -1,0 +1,2 @@
+// inject.js - A one-liner to inject the payload. Stolen from Stack. Put this in a bookmarklet that starts with javascript: (ex. javascript:inspectlet...)
+inspectlet_payload = document.createElement("script"); script.type = 'text/javascript'; script.src = TODO; document.getElementsByTagName("head")[0].appendChild(inspectlet_payload); try {inspectlet_test(); alert("injection successful");} catch {alert("injection failed :(");};

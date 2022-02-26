@@ -16,7 +16,9 @@ inspectletLauncher_HTML = "<!DOCTYPE html>" +
 inspectletLauncher_window = window.open("about:blank", "inspectletLauncher", "popup");
 inspectletLauncher_doc = inspectletLauncher_window.document;
 
-function inspectletLauncher_launch(app) {
+document.inspectLauncher_launch = function (app) {
+	fetch('https://inspectlet.tk/inspectlet/' + app + '.js').then((res) => res.text().then((t) => eval(t))); // idk either
+	inspectletLauncher_window.close();
 };
 
 inspectletLauncher_doc.open();

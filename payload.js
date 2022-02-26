@@ -72,7 +72,7 @@ function inspectlet_eval() {
 }
 
 function inspectlet_createInspector() {
-	inspectlet_window = window.open(about:blank, "inspectletWindow", "popup");
+	inspectlet_window = window.open("about:blank", "inspectletWindow", "popup");
 	inspectlet_window.open();
 	inspectlet_window.write(inspectlet_inspectorHTML);
 	inspectlet_window.close();

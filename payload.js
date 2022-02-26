@@ -43,7 +43,7 @@ function inspectlet_test() {
 }
 
 function inspectlet_readDocument() {
-	inspectlet_window.document.getElementById("inspectorTextArea").value = inspectorXMLSerializer().serializeToString(document);
+	inspectlet_window.document.getElementById("inspectorTextArea").value = XMLSerializer().serializeToString(document);
 }
 
 function inspectlet_writeDocument() {

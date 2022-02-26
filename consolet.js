@@ -34,7 +34,7 @@ function consolet_readConsole() {
 // eval instructions
 function consolet_eval() {
 	console.log("> " + consolet_window.getElementById("consoleInput").value);
-	console.log(eval(consolet_window.getElementById("consoleInput").value));
+	console.log(Function("return " + (consolet_window.getElementById("consoleInput").value)) ());
 	consolet_window.getElementById("consoleInput").value = "";
 	consolet_readConsole();
 };

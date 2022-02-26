@@ -26,7 +26,7 @@ var inspectlet_inspectorHTML = `<!DOCTYPE html>
 				<button onclick="inspectlet_writeDocument()">Write Document</button>
 			</div>
 		</div>
-		<div id="console" class="tab">
+		<div id="console" class="tab" style="display: none;">
 			<div>
 				<p id="consoleOutput"></p>
 			</div>
@@ -55,7 +55,7 @@ function inspectlet_writeDocument() {
 function inspectlet_switchTabs(tab) {
 	tabs = inspectlet_window.document.getElementsByClassName("tab");
 	for (i = 0; i < tabs.length; i++) {
-		tabs.style.display = "none";
+		tabs[i].style.display = "none";
 	}
 	inspectlet_window.document.getElementById(tab).style.display = "block";
 }

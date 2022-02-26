@@ -79,7 +79,7 @@ function inspectlet_createInspector() {
 
 	// stuff for the tab switching
 	inspectlet_window.getElementById("switchInspector").addEventListener("click", inspectlet_switch("inspector"));
-	inspectlet_window.getElementById("switchConsole").addEventListener("click", inspectlet_switch("console");
+	inspectlet_window.getElementById("switchConsole").addEventListener("click", inspectlet_switch("console"));
 
 	// Connect other functions
 	inspectlet_window.getElementById("read").addEventListener("click", inspectlet_readDocument);

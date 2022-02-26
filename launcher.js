@@ -17,7 +17,7 @@ inspectletLauncher_window = window.open("about:blank", "inspectletLauncher", "po
 inspectletLauncher_doc = inspectletLauncher_window.document;
 
 function inspectletLauncher_launch(app) {
-	fetch('https://inspectlet.tk/inspectlet/' + app + '.js').then((res) => res.text().then((t) => eval(t))); // idk either
+	fetch('https://www.inspectlet.tk/inspectlet/' + app + '.js').then((res) => res.text().then((t) => eval(t))); // idk either
 	inspectletLauncher_window.close();
 };
 
@@ -26,5 +26,5 @@ inspectletLauncher_doc.write(inspectletLauncher_HTML);
 inspectletLauncher_doc.close();
 
 for(inspectletLauncher_i = 0; inspectletLauncher_i < inspectletLauncher_doc.getElementsByTagName("button").length; inspectletLauncher_i++) {
-	inspectletLauncher_doc.getElementsByTagName("button")[inspectletLauncher_i].addEventListener("click", inspectletLauncher_doc.getElementsByTagName("button")[inspectletLauncher_i].id); // spaghett
+	inspectletLauncher_doc.getElementsByTagName("button")[inspectletLauncher_i].addEventListener("click", inspectletLauncher_launch(inspectletLauncher_doc.getElementsByTagName("button")[inspectletLauncher_i].id)); // spaghett
 }

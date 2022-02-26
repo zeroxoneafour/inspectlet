@@ -54,7 +54,7 @@ function inspectlet_writeDocument() {
 
 function inspectlet_switchTabs(tab) {
 	tabs = inspectlet_window.document.getElementsByClassName("tab");
-	for i = 0; i < tabs.length; i++ {
+	for (i = 0; i < tabs.length; i++) {
 		tabs.style.display = "none";
 	}
 	inspectlet_window.document.getElementById(tab).style.display = "block";

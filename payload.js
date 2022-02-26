@@ -53,11 +53,11 @@ function inspectlet_writeDocument() {
 }
 
 function inspectlet_switchTabs(tab) {
-	var tabs = inspectlet_window.document.getElementsByClassName("tab")
+	tabs = inspectlet_window.document.getElementsByClassName("tab");
 	for i = 0; i < tabs.length; i++ {
-		tabs.style.display = "none"
+		tabs.style.display = "none";
 	}
-	inspectlet_window.document.getElementById(tab).style.display = "block"
+	inspectlet_window.document.getElementById(tab).style.display = "block";
 }
 
 function inspectlet_readConsole() {
@@ -67,7 +67,7 @@ function inspectlet_readConsole() {
 function inspectlet_eval() {
 	console.log("> " + inspectlet_window.document.getElementById("consoleInput").value);
 	console.log(eval(command));
-	inspectlet_window.document.getElementById("consoleInput").value = ""
+	inspectlet_window.document.getElementById("consoleInput").value = "";
 	inspectlet_readConsole();
 }
 
@@ -82,7 +82,7 @@ function inspectlet_createInspector() {
 	// create listener for input
 	document.GetElementById("consoleInput").addEventListener("keyup", function(event) {
 		if (event.keyCode === 13) {
-			inspectlet_eval()
+			inspectlet_eval();
 		}
-	}
+	});
 }

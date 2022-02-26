@@ -80,7 +80,7 @@ function inspectlet_createInspector() {
 	inspectlet_readConsole();
 
 	// create listener for input
-	document.GetElementById("consoleInput").addEventListener("keyup", function(event) {
+	document.getElementById("consoleInput").addEventListener("keyup", function(event) {
 		if (event.keyCode === 13) {
 			inspectlet_eval();
 		}

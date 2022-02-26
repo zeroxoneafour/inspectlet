@@ -26,7 +26,7 @@ var inspectlet_HTML = "<!DOCTYPE html>" +
 "</div>" +
 "<textarea id='textArea' style='width: 100%; height: 100%; font-family: monospace;'></textarea>" +
 "</div>" +
-"<div class='tool' id='console' style='display: hidden'>" +
+"<div class='tool' id='console' style='display: none'>" +
 "<div style='display: flex; flex-flow: column; height: 100%; width: 100%;'>" +
 "<p id='consoleOutput' style='font-family: monospace; white-space: pre;'></p>" +
 "</div>" +
@@ -65,7 +65,7 @@ function inspectlet_eval() {
 
 function inspectlet_switch(tab) {
 	for ( const inspectlet_tab in inspectlet_window.getElementsByClassName("tool") ) {
-		inspectlet_tab.style.display = "none";
+		inspectlet_window.getElementsByClassName("tool")[inspectlet_tab].style.display = "none";
 	};
 	inspectlet_window.getElementById(tab).style.display = "block";
 };

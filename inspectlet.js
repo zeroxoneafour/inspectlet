@@ -1,39 +1,57 @@
 // inspectlet.js
 
+inspectlet_version = "v0.1.0"
 // code stolen from StackOverflow - keeps a console log
-console.stdlog = console.log.bind(console);
 inspectlet_consoleLog = [];
+
+console.stdlog = console.log.bind(console);
 console.log = function(){
     inspectlet_consoleLog.push(Array.from(arguments));
     console.stdlog.apply(console, arguments);
+	inspectlet_readConsole();
+};
+
+console.stdinfo = console.info.bind(console);
+console.log = function(){
+    inspectlet_consoleLog.push(Array.from(arguments));
+    console.stdinfo.apply(console, arguments);
+	inspectlet_readConsole();
+};
+
+console.stderror = console.error.bind(console);
+console.error = function(){
+    inspectlet_consoleLog.push(Array.from(arguments));
+    console.stderror.apply(console, arguments);
+	inspectlet_readConsole();
 };
 
 var inspectlet_helpPage = "<h4>Inspectlet Help</h4>" +
 "<h5>Inspector</h5>" +
 "<ul>" +
-"<li>Click \"Read Document\" to read the current document</li>" +
-"<li>Edit text in the text box, and click \"Write Document\" to save</li>" +
+"<li>Click \"Read Document\" to read the current document.</li>" +
+"<li>Edit text in the text box, and click \"Write Document\" to save.</li>" +
 "</ul>" +
 "<h5>Console</h5>" +
 "<ul>" +
-"<li>Enter text into the console and see output above</li>" +
+"<li>Enter text into the console and see output above.</li>" +
 "</ul>" +
 "<h5>Scripts</h5>" +
 "<ul>" +
-"<li>Add a script in the text box, and click \"Execute Script\" to run</li>" +
-"<li>Click \"Inject Script\" to insert your script, and click \"Pull Script\" to read it. This will not execute the script.</li>" +
+"<li>Add a script in the text box, and click \"Execute Script\" to run without injecting.</li>" +
+"<li>Click \"Inject Script\" to insert your script, and click \"Pull Script\" to read it.</li>" +
 "</ul>" +
 "<h5>CSS</h5>" +
 "<ul>" +
-"<li>Add CSS into the text box, and click \"Write CSS\" to insert it</li>" +
-"<li>Click \"Read CSS\" to read the written CSS</li>" +
+"<li>Add CSS into the text box, and click \"Write CSS\" to insert it.</li>" +
+"<li>Click \"Read CSS\" to read the written CSS.</li>" +
 "</ul>" +
 "<h5>Toggle Edit</h5>" +
 "<ul>" +
-"<li>Click \"Toggle Edit\" to switch between editing mode (can edit text) and normal browsing mode</li>" +
+"<li>Click \"Toggle Edit\" to switch between editing mode (can edit text) and normal browsing mode.</li>" +
 "</ul>" +
 "<h5>Inspectlet</h5>" +
 "<ul>" +
+"<li>Version " + inspectlet_version + "</li>" +
 "<li>Made by Vaughan Milliman</li>" +
 "<li>Licensed under the <a href='https://inspectlet.tk/inspectlet/license.txt'>MIT License</a></li>" +
 "<li><a href='https://inspectlet.tk'>Website</a></li>" +
@@ -109,7 +127,7 @@ function inspectlet_writeDocument() {
 };
 
 function inspectlet_executeScript() {
-	try { Function(inspectlet_window.getElementById("scriptEditor").value)(); } catch(inspectletErr) { console.log(inspectletErr); };
+	try { Function(inspectlet_window.getElementById("scriptEditor").value)(); } catch(inspectlet_err) { console.error(inspectlet_err); };
 };
 
 function inspectlet_readScript() {
@@ -121,14 +139,13 @@ function inspectlet_readScript() {
 };
 
 function inspectlet_writeScript() {
-	if (document.getElementById("inspectletCustomScript") === null) {
-		inspectlet_script = document.createElement("script");
-		inspectlet_script.id = "inspectletCustomScript";
-		inspectlet_script.innerHTML = inspectlet_window.getElementById("scriptEditor").value;
-		document.head.appendChild(inspectlet_script);
-	} else {
-		document.getElementById("inspectletCustomScript").innerHTML = inspectlet_window.getElementById("scriptEditor").value;
+	if (!(document.getElementById("inspectletCustomScript") === null)) {
+		document.head.removeChild(document.getElementById("inspectletCustomScript"));
 	};
+	inspectlet_script = document.createElement("script");
+	inspectlet_script.id = "inspectletCustomScript";
+	inspectlet_script.innerHTML = inspectlet_window.getElementById("scriptEditor").value;
+	document.head.appendChild(inspectlet_script);
 };
 
 function inspectlet_readCSS() {
@@ -140,14 +157,13 @@ function inspectlet_readCSS() {
 };
 
 function inspectlet_writeCSS() {
-	if (document.getElementById("inspectletCustomCSS") === null) {
-		inspectlet_css = document.createElement("style");
-		inspectlet_css.id = "inspectletCustomCSS";
-		inspectlet_css.innerHTML = inspectlet_window.getElementById("cssEditor").value;
-		document.head.appendChild(inspectlet_css);
-	} else {
-		document.getElementById("inspectletCustomCSS").innerHTML = inspectlet_window.getElementById("cssEditor").value;
+	if (!(document.getElementById("inspectletCustomCSS") === null)) {
+		document.head.removeChild(document.getElementById("inspectletCustomCSS"));
 	};
+	inspectlet_css = document.createElement("style");
+	inspectlet_css.id = "inspectletCustomCSS";
+	inspectlet_css.innerHTML = inspectlet_window.getElementById("cssEditor").value;
+	document.head.appendChild(inspectlet_css);
 };
 
 function inspectlet_switchEdit() {
@@ -162,15 +178,19 @@ function inspectlet_switchEdit() {
 
 // read the console
 function inspectlet_readConsole() {
-	inspectlet_window.getElementById("consoleOutput").innerHTML = inspectlet_consoleLog.join('\n');
+	void(inspectlet_window.getElementById("consoleOutput").innerHTML = inspectlet_consoleLog.join('\n'));
 };
 
 // eval instructions
 function inspectlet_eval() {
 	console.log("> " + inspectlet_window.getElementById("consoleInput").value);
-	console.log(Function("return " + (inspectlet_window.getElementById("consoleInput").value)) ());
+	try {
+		inspectlet_consoleRet = Function("return " + (inspectlet_window.getElementById("consoleInput").value)) ();
+		console.log(inspectlet_consoleRet);
+	} catch (inspectlet_err) {
+		console.error(inspectlet_err);
+	}
 	inspectlet_window.getElementById("consoleInput").value = "";
-	inspectlet_readConsole();
 };
 
 function inspectlet_switch(tab) {

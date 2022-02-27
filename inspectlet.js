@@ -189,7 +189,7 @@ function inspectlet_eval() {
 		console.log(inspectlet_consoleRet);
 	} catch (inspectlet_err) {
 		console.error(inspectlet_err);
-	}
+	};
 	inspectlet_window.getElementById("consoleInput").value = "";
 };
 

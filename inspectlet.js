@@ -4,7 +4,7 @@
 console.stdlog = console.log.bind(console);
 inspectlet_consoleLog = [];
 console.log = function(){
-    inspectlet_consoleLog.push(Array.from(arguments).replace(/</g, "&lt;"));
+    inspectlet_consoleLog.push(Array.from(arguments));
     console.stdlog.apply(console, arguments);
 };
 

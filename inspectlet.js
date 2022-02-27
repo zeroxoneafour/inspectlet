@@ -64,7 +64,7 @@ function inspectlet_eval() {
 };
 
 function inspectlet_switch(tab) {
-	for ( const inspectlet_tab in inspectlet_window.getElementsByClassName("tool") ) {
+	for ( var inspectlet_tab = 0; inspectlet_tab < inspectlet_window.getElementsByClassName("tool").length; inspectlet_tab++ ) {
 		inspectlet_window.getElementsByClassName("tool")[inspectlet_tab].style.display = "none";
 	};
 	inspectlet_window.getElementById(tab).style.display = "block";
@@ -73,13 +73,14 @@ function inspectlet_switch(tab) {
 // create the inspector
 function inspectlet_createInspector() {
 	inspectlet_window = window.open("about:blank", "inspectletWindow", "popup").document;
+
 	inspectlet_window.open();
 	inspectlet_window.write(inspectlet_HTML);
 	inspectlet_window.close();
 
 	// stuff for the tab switching
-	inspectlet_window.getElementById("switchInspector").addEventListener("click", inspectlet_switch("inspector"));
-	inspectlet_window.getElementById("switchConsole").addEventListener("click", inspectlet_switch("console"));
+	inspectlet_window.getElementById("switchInspector").addEventListener("click", function(){return inspectlet_switch("inspector");});
+	inspectlet_window.getElementById("switchConsole").addEventListener("click", function(){return inspectlet_switch("console");});
 
 	// Connect other functions
 	inspectlet_window.getElementById("read").addEventListener("click", inspectlet_readDocument);

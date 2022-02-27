@@ -1,6 +1,6 @@
 // inspectlet.js
 
-inspectlet_version = "v0.1.0"
+inspectlet_version = "v0.1.0";
 // code stolen from StackOverflow - keeps a console log
 inspectlet_consoleLog = [];
 

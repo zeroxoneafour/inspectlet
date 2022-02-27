@@ -12,6 +12,7 @@ console.log = function(){
 var inspectlet_HTML = "<!DOCTYPE html>" +
 "<html>" +
 "<head>" +
+"<meta name='viewport' content='width=device-width, initial-scale=1'>" +
 "<title>Inspectlet</title>" +
 "</head>" +
 "<body>" +
@@ -19,18 +20,36 @@ var inspectlet_HTML = "<!DOCTYPE html>" +
 "<div>" +
 "<input type='button' value='Inspector' id='switchInspector'></input>" +
 "<input type='button' value='Console' id='switchConsole'></input>" +
+"<input type='button' value='Scripts' id='switchScripts'></input>" +
+"<input type='button' value='CSS' id='switchCSS'></input>" +
+"<input type='button' value='Toggle Edit' id='switchEdit'></input>" +
 "<div class='tool' id='inspector' style='display: box'>" +
 "<div style='display: flex; flex-direction: row; margin: 0 auto; width: 100%;'>" +
-"<input type='button' value='Read Document' id='read'></input>" +
-"<input type='button' value='Write Document' id='write'></input>" +
+"<input type='button' value='Read Document' id='readDocument'></input>" +
+"<input type='button' value='Write Document' id='writeDocument'></input>" +
 "</div>" +
-"<textarea id='textArea' style='width: 100%; height: 100%; font-family: monospace;'></textarea>" +
+"<textarea id='documentEditor' style='width: 100%; height: 100%; font-family: monospace;'></textarea>" +
 "</div>" +
 "<div class='tool' id='console' style='display: none'>" +
 "<div style='display: flex; flex-flow: column; height: 100%; width: 100%;'>" +
 "<p id='consoleOutput' style='font-family: monospace; white-space: pre;'></p>" +
 "</div>" +
 "<input type='text' id='consoleInput' style='font-family: monospace; width: 100%;'></input>" +
+"</div>" +
+"<div class='tool' id='scripts' style='display: none'>" +
+"<div style='display: flex; flex-direction: row; margin: 0 auto; width: 100%;'>" +
+"<input type='button' value='Execute Script' id='executeScript'></input>" +
+"<input type='button' value='Pull Script' id='readScript'></input>" +
+"<input type='button' value='Inject Script' id='writeScript'></input>" +
+"</div>" +
+"<textarea id='scriptEditor' style='width: 100%; height: 100%; font-family: monospace;'></textarea>" +
+"</div>" +
+"<div class='tool' id='css' style='display: none'>" +
+"<div style='display: flex; flex-direction: row; margin: 0 auto; width: 100%;'>" +
+"<input type='button' value='Read CSS' id='readCSS'></input>" +
+"<input type='button' value='Write CSS' id='writeCSS'></input>" +
+"</div>" +
+"<textarea id='cssEditor' style='width: 100%; height: 100%; font-family: monospace;'></textarea>" +
 "</div>" +
 "</body>" +
 "</html>";
@@ -40,14 +59,64 @@ var inspectlet_window;
 
 // read root document
 function inspectlet_readDocument() {
-	inspectlet_window.getElementById("textArea").value = new XMLSerializer().serializeToString(document);
+	inspectlet_window.getElementById("documentEditor").value = new XMLSerializer().serializeToString(document);
 };
 
 // write to root document
 function inspectlet_writeDocument() {
 	document.open();
-	document.write(inspectlet_window.getElementById("textArea").value);
+	document.write(inspectlet_window.getElementById("documentEditor").value);
 	document.close();
+};
+
+function inspectlet_executeScript() {
+	try { Function(inspectlet_window.getElementById("scriptEditor").value)(); } catch(inspectletErr) { console.log(inspectletErr); };
+};
+
+function inspectlet_readScript() {
+	if (document.getElementById("inspectletCustomScript") === null) {
+		inspectlet_window.getElementById("scriptEditor").value = "";
+	} else {
+		inspectlet_window.getElementById("scriptEditor").value = document.getElementById("inspectletCustomScript").innerHTML;
+	};
+};
+
+function inspectlet_writeScript() {
+	if (document.getElementById("inspectletCustomScript") === null) {
+		inspectlet_script = document.createElement("script");
+		inspectlet_script.innerHTML = inspectlet_window.getElementById("scriptEditor").value;
+		document.head.appendChild(inspectlet_script);
+	} else {
+		document.getElementById("inspectletCustomScript").innerHTML = inspectlet_window.getElementById("scriptEditor").value;
+	};
+};
+
+function inspectlet_readCSS() {
+	if (document.getElementById("inspectletCustomCSS") === null) {
+		inspectlet_window.getElementById("cssEditor").value = "";
+	} else {
+		inspectlet_window.getElementById("cssEditor").value = document.getElementById("inspectletCustomCSS").innerHTML;
+	};
+};
+
+function inspectlet_writeCSS() {
+	if (document.getElementById("inspectletCustomCSS") === null) {
+		inspectlet_css = document.createElement("style");
+		inspectlet_css.innerHTML = inspectlet_window.getElementById("cssEditor").value;
+		document.head.appendChild(inspectlet_css);
+	} else {
+		document.getElementById("inspectletCustomCSS").innerHTML = inspectlet_window.getElementById("cssEditor").value;
+	};
+};
+
+function inspectlet_switchEdit() {
+	if (document.body.contentEditable != "true") {
+		document.body.contentEditable = "true";
+		document.body.designMode = "on";
+	} else {
+		document.body.contentEditable = "false";
+		document.body.designMode = "off";
+	};
 };
 
 // read the console
@@ -81,10 +150,21 @@ function inspectlet_createInspector() {
 	// stuff for the tab switching
 	inspectlet_window.getElementById("switchInspector").addEventListener("click", function(){return inspectlet_switch("inspector");});
 	inspectlet_window.getElementById("switchConsole").addEventListener("click", function(){return inspectlet_switch("console");});
+	inspectlet_window.getElementById("switchScripts").addEventListener("click", function(){return inspectlet_switch("scripts");});
+	inspectlet_window.getElementById("switchCSS").addEventListener("click", function(){return inspectlet_switch("css");});
 
 	// Connect other functions
-	inspectlet_window.getElementById("read").addEventListener("click", inspectlet_readDocument);
-	inspectlet_window.getElementById("write").addEventListener("click", inspectlet_writeDocument);
+	inspectlet_window.getElementById("readDocument").addEventListener("click", inspectlet_readDocument);
+	inspectlet_window.getElementById("writeDocument").addEventListener("click", inspectlet_writeDocument);
+
+	inspectlet_window.getElementById("executeScript").addEventListener("click", inspectlet_executeScript);
+	inspectlet_window.getElementById("readScript").addEventListener("click", inspectlet_readScript);
+	inspectlet_window.getElementById("writeScript").addEventListener("click", inspectlet_writeScript);
+
+	inspectlet_window.getElementById("readCSS").addEventListener("click", inspectlet_readCSS);
+	inspectlet_window.getElementById("writeCSS").addEventListener("click", inspectlet_executeScript);
+
+	inspectlet_window.getElementById("switchEdit").addEventListener("click", inspectlet_switchEdit);
 
 	// create listener for input
 	inspectlet_window.getElementById("consoleInput").addEventListener("keyup", function(event) {
